@@ -1,0 +1,73 @@
+---
+import Layout from '../layouts/Layout.astro';
+import anime from '../data/anime.json';
+import manga from '../data/manga.json';
+
+function formatDate(d: string | null | undefined) {
+  if (!d) return '—';
+  const date = new Date(d);
+  if (Number.isNaN(date.getTime())) return d;
+  return date.toLocaleDateString('es-ES', { year: 'numeric', month: 'long', day: 'numeric' });
+}
+---
+
+<Layout title="Anime & Manga" description="Ficha técnica del anime y manga de Ghost Sweeper Mikami: staff, estudio, fechas y capítulos.">
+  <section class="hero">
+    <div class="container">
+      <p class="subtitle">Ficha técnica</p>
+      <h1>Anime &amp; Manga</h1>
+      <p class="lede">Todo sobre la producción original de Takashi Shiina.</p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <div class="section-title">
+        <span class="icon">📺</span>
+        <h2>Anime</h2>
+      </div>
+      <div class="detail-hero">
+        {anime.image && <img src={anime.image} alt={anime.title} width="240" />}
+        <div class="panel">
+          <h3>{anime.title}</h3>
+          {anime.titleJapanese && <p class="lede">{anime.titleJapanese}</p>}
+          <ul class="stat-list">
+            <li><span class="label">Episodios</span>{anime.episodes ?? '—'}</li>
+            <li><span class="label">Estado</span>{anime.status ?? '—'}</li>
+            <li><span class="label">Emisión</span>{formatDate(anime.aired?.from)} — {formatDate(anime.aired?.to)}</li>
+            <li><span class="label">Estudio</span>{(anime.studios ?? []).join(', ') || '—'}</li>
+            <li><span class="label">Géneros</span>{(anime.genres ?? []).join(', ') || '—'}</li>
+            {anime.score && <li><span class="label">Puntuación</span>{anime.score.toFixed(1)} / 10</li>}
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <div class="section-title">
+        <span class="icon">📖</span>
+        <h2>Manga</h2>
+      </div>
+      <div class="detail-hero">
+        {manga.image && <img src={manga.image} alt={manga.title} width="240" />}
+        <div class="panel">
+          <h3>{manga.title}</h3>
+          <ul class="stat-list">
+            <li><span class="label">Capítulos</span>{manga.chapters ?? '—'}</li>
+            <li><span class="label">Volúmenes</span>{manga.volumes ?? '—'}</li>
+            <li><span class="label">Estado</span>{manga.status ?? '—'}</li>
+            <li><span class="label">Publicación</span>{formatDate(manga.published?.from)} — {formatDate(manga.published?.to)}</li>
+            <li><span class="label">Autor(es)</span>{(manga.authors ?? []).join(', ') || '—'}</li>
+          </ul>
+          {manga.synopsis && (
+            <div>
+              {manga.synopsis.split('\n').filter(Boolean).map((p: string) => <p>{p}</p>)}
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  </section>
+</Layout>

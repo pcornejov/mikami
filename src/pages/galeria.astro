@@ -1,0 +1,27 @@
+---
+import Layout from '../layouts/Layout.astro';
+import gallery from '../data/gallery.json';
+---
+
+<Layout title="Galería" description="Galería de imágenes oficiales de Ghost Sweeper Mikami.">
+  <section class="hero">
+    <div class="container">
+      <p class="subtitle">Archivo visual</p>
+      <h1>Galería</h1>
+      <p class="lede">Portadas, banners y retratos de personajes recopilados de fuentes públicas.</p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <div class="gallery-grid">
+        {gallery.map((img: any) => (
+          <figure>
+            <img src={img.url} alt={img.caption} loading="lazy" />
+            <figcaption>{img.caption}</figcaption>
+          </figure>
+        ))}
+      </div>
+    </div>
+  </section>
+</Layout>
