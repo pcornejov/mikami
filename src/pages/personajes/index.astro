@@ -1,0 +1,56 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import characters from '../../data/characters.json';
+
+const base = import.meta.env.BASE_URL;
+
+const roleOrder = ['MAIN', 'SUPPORTING', 'BACKGROUND'];
+const roleLabels: Record<string, string> = {
+  MAIN: 'Protagonistas',
+  SUPPORTING: 'Secundarios',
+  BACKGROUND: 'Apariciones',
+};
+
+const grouped = roleOrder
+  .map((role) => ({
+    role,
+    items: characters.filter((c: any) => c.role === role),
+  }))
+  .filter((g) => g.items.length > 0);
+---
+
+<Layout title="Personajes" description="Todos los personajes de Ghost Sweeper Mikami: protagonistas, secundarios y fantasmas.">
+  <section class="hero">
+    <div class="container">
+      <p class="subtitle">Dramatis Personae</p>
+      <h1>Personajes</h1>
+      <p class="lede">Exorcistas, fantasmas, monstruos y mortales atrapados en el negocio de la limpieza espiritual.</p>
+    </div>
+  </section>
+
+  {grouped.map((group) => (
+    <section class="section">
+      <div class="container">
+        <div class="section-title">
+          <span class="icon">🔮</span>
+          <h2>{roleLabels[group.role] ?? group.role}</h2>
+        </div>
+        <div class="card-grid">
+          {group.items.map((c: any) => (
+            <div class="card">
+              <a class="card-link" href={`${base}/personajes/${c.id}`}>
+                {c.image
+                  ? <img class="thumb" src={c.image} alt={c.name} loading="lazy" />
+                  : <div class="thumb" />}
+                <div class="body">
+                  <p class="name">{c.name}</p>
+                  {c.seiyuu && <p class="meta">VA: {c.seiyuu}</p>}
+                </div>
+              </a>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  ))}
+</Layout>

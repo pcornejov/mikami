@@ -1,0 +1,53 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import characters from '../../data/characters.json';
+
+export function getStaticPaths() {
+  return characters.map((c: any) => ({
+    params: { id: String(c.id) },
+    props: { character: c },
+  }));
+}
+
+const { character } = Astro.props as { character: any };
+const base = import.meta.env.BASE_URL;
+
+const roleLabels: Record<string, string> = {
+  MAIN: 'Protagonista',
+  SUPPORTING: 'Secundario',
+  BACKGROUND: 'Aparición',
+};
+---
+
+<Layout title={character.name} description={character.description?.slice(0, 150) ?? `Ficha de ${character.name} en Ghost Sweeper Mikami.`}>
+  <section class="section">
+    <div class="container">
+      <a class="back-link" href={`${base}/personajes`}>&larr; Volver a personajes</a>
+      <div class="detail-hero">
+        {character.image
+          ? <img src={character.image} alt={character.name} width="240" />
+          : <div class="thumb" />}
+        <div>
+          <p class="badge">{roleLabels[character.role] ?? character.role}</p>
+          <h1>{character.name}</h1>
+          {character.nameNative && <p class="lede">{character.nameNative}</p>}
+
+          <ul class="stat-list">
+            {character.seiyuu && (
+              <li>
+                <span class="label">Seiyuu (japonés)</span>
+                {character.seiyuu}
+              </li>
+            )}
+          </ul>
+
+          {character.description && (
+            <div class="panel">
+              {character.description.split('\n').filter(Boolean).map((p: string) => <p>{p}</p>)}
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  </section>
+</Layout>
