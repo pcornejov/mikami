@@ -1,0 +1,51 @@
+---
+import Layout from '../layouts/Layout.astro';
+import episodes from '../data/episodes.json';
+import anime from '../data/anime.json';
+
+const isEstimate = episodes.some((e: any) => e.source === 'anilist-estimate');
+
+function formatDate(d: string | null) {
+  if (!d) return '—';
+  const date = new Date(d);
+  return date.toLocaleDateString('es-ES', { year: 'numeric', month: 'long', day: 'numeric' });
+}
+---
+
+<Layout title="Episodios" description={`Lista completa de los ${anime.episodes} episodios de Ghost Sweeper Mikami.`}>
+  <section class="hero">
+    <div class="container">
+      <p class="subtitle">Bitácora de exorcismos</p>
+      <h1>Episodios</h1>
+      <p class="lede">{anime.episodes} episodios emitidos entre {formatDate(anime.aired?.from)} y {formatDate(anime.aired?.to)}.</p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      {isEstimate && (
+        <p class="badge" style="margin-bottom:1rem;">
+          Fechas estimadas: títulos individuales por episodio no disponibles vía APIs públicas sin autenticación en el momento de la descarga.
+        </p>
+      )}
+      <table class="ep-table">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Título</th>
+            <th>Emisión</th>
+          </tr>
+        </thead>
+        <tbody>
+          {episodes.map((ep: any) => (
+            <tr>
+              <td>{ep.number}</td>
+              <td>{ep.title || `Episodio ${ep.number}`}</td>
+              <td>{formatDate(ep.aired?.from ?? ep.aired)}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  </section>
+</Layout>
