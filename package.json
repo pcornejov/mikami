@@ -1,0 +1,17 @@
+{
+  "name": "mikami",
+  "version": "1.0.0",
+  "description": "Enciclopedia fan de Ghost Sweeper Mikami (GS美神)",
+  "type": "module",
+  "scripts": {
+    "dev": "astro dev",
+    "start": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "fetch-data": "node scripts/fetch-data.mjs"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "astro": "^7.1.1"
+  }
+}
