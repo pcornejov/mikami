@@ -1,0 +1,60 @@
+---
+import '../styles/global.css';
+
+interface Props {
+  title: string;
+  description?: string;
+}
+
+const { title, description = 'Enciclopedia fan de Ghost Sweeper Mikami (GS美神), la cazafantasmas de los 90.' } = Astro.props;
+const base = import.meta.env.BASE_URL;
+const path = Astro.url.pathname;
+
+const links = [
+  { href: `${base}/`, label: 'Inicio' },
+  { href: `${base}/personajes`, label: 'Personajes' },
+  { href: `${base}/episodios`, label: 'Episodios' },
+  { href: `${base}/info`, label: 'Anime & Manga' },
+  { href: `${base}/galeria`, label: 'Galería' },
+];
+
+function isActive(href: string) {
+  const normalized = href.replace(/\/$/, '') || '/';
+  const currentPath = path.replace(/\/$/, '') || '/';
+  return currentPath === normalized || (normalized !== '/' && currentPath.startsWith(normalized));
+}
+---
+
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content={description} />
+    <title>{title} · GS Mikami Wiki</title>
+    <link rel="icon" href={`${base}/favicon.svg`} type="image/svg+xml" />
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container">
+        <a class="brand" href={`${base}/`}>
+          <span class="glyph">👻</span> GS Mikami Wiki
+        </a>
+        <nav class="main-nav">
+          {links.map((link) => (
+            <a href={link.href} aria-current={isActive(link.href) ? 'page' : undefined}>{link.label}</a>
+          ))}
+        </nav>
+      </div>
+    </header>
+    <main>
+      <slot />
+    </main>
+    <footer class="site-footer">
+      <div class="container">
+        <p>Sitio fan no oficial sobre Ghost Sweeper Mikami (GS美神極楽大作戦!!) de Takashi Shiina.</p>
+        <p>Datos e imágenes cortesía de <a href="https://jikan.moe" target="_blank" rel="noopener">Jikan API</a> y <a href="https://anilist.co" target="_blank" rel="noopener">AniList</a>.</p>
+      </div>
+    </footer>
+  </body>
+</html>

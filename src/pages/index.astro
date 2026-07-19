@@ -1,0 +1,80 @@
+---
+import Layout from '../layouts/Layout.astro';
+import anime from '../data/anime.json';
+import characters from '../data/characters.json';
+
+const base = import.meta.env.BASE_URL;
+const mains = characters.filter((c: any) => c.role === 'MAIN').slice(0, 4);
+const synopsisShort = (anime.synopsis ?? '').split('\n')[0];
+---
+
+<Layout title="Inicio" description={synopsisShort}>
+  <section class="hero">
+    <div class="container">
+      <p class="subtitle">Enciclopedia fan · GS美神 極楽大作戦!!</p>
+      <h1>Ghost Sweeper Mikami</h1>
+      <p class="lede">{synopsisShort}</p>
+      <div class="hero-cta">
+        <a class="btn primary" href={`${base}/personajes`}>Ver personajes</a>
+        <a class="btn" href={`${base}/episodios`}>Explorar episodios</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <div class="section-title">
+        <span class="icon">📜</span>
+        <h2>Sinopsis</h2>
+      </div>
+      <div class="panel">
+        {anime.synopsis?.split('\n').filter(Boolean).map((p: string) => <p>{p}</p>)}
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <div class="section-title">
+        <span class="icon">🕯️</span>
+        <h2>Protagonistas</h2>
+      </div>
+      <div class="card-grid">
+        {mains.map((c: any) => (
+          <div class="card">
+            <a class="card-link" href={`${base}/personajes/${c.id}`}>
+              {c.image && <img class="thumb" src={c.image} alt={c.name} loading="lazy" />}
+              <div class="body">
+                <p class="name">{c.name}</p>
+                <p class="meta">{c.role}</p>
+              </div>
+            </a>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <div class="section-title">
+        <span class="icon">🗺️</span>
+        <h2>Explora la wiki</h2>
+      </div>
+      <div class="card-grid">
+        <a class="card" href={`${base}/personajes`}>
+          <div class="body"><p class="name">Personajes</p><p class="meta">Perfiles y seiyuus</p></div>
+        </a>
+        <a class="card" href={`${base}/episodios`}>
+          <div class="body"><p class="name">Episodios</p><p class="meta">{anime.episodes} capítulos</p></div>
+        </a>
+        <a class="card" href={`${base}/info`}>
+          <div class="body"><p class="name">Anime &amp; Manga</p><p class="meta">Staff y fechas</p></div>
+        </a>
+        <a class="card" href={`${base}/galeria`}>
+          <div class="body"><p class="name">Galería</p><p class="meta">Imágenes oficiales</p></div>
+        </a>
+      </div>
+    </div>
+  </section>
+</Layout>
